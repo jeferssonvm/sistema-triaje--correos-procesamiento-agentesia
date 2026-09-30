@@ -1,0 +1,988 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {},
+        "options": {
+          "downloadAttachments": true
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -16,
+        0
+      ],
+      "id": "c9071339-70a3-4cb8-949d-0f8d5e9d1f7c",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "LnL75k0G10iOcyJf",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        1920,
+        160
+      ],
+      "id": "075fa021-5b09-4e4c-b41e-4d48c6afce2c",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "TWP4peDzmRhFubxF",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1j4HZ5mYalUpjYWtWqBbGhD3DXJZr3KfqJtotpcbUcyE",
+          "mode": "list",
+          "cachedResultName": "categoria_n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1j4HZ5mYalUpjYWtWqBbGhD3DXJZr3KfqJtotpcbUcyE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1j4HZ5mYalUpjYWtWqBbGhD3DXJZr3KfqJtotpcbUcyE/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        2048,
+        160
+      ],
+      "id": "5e3308b2-3bb0-4f0a-9452-49bac16e688b",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Mun66GMacx2BZ6Q9",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"categoria\": {\n      \"type\": \"string\",\n      \"enum\": [\"Ventas\", \"Soporte\", \"Facturacion\", \"RRHH\"]\n    },\n    \"tiene_adjunto\": {\n      \"type\": \"boolean\",\n      \"description\": \"Indica si el correo incluye un archivo adjunto procesado.\"\n    },\n    \"tipo_adjunto\": {\n      \"type\": \"string\",\n      \"description\": \"Tipo o clasificación del archivo adjunto (ej: HOJA_DE_VIDA, FACTURA, DOCUMENTO_FISCAL, REPORTE_ERROR, NINGUNO).\"\n    },\n    \"detalle_adjunto\": {\n      \"type\": \"string\",\n      \"description\": \"Breve descripción o resumen de lo que contiene el archivo adjunto. Indicar 'Ninguno' si no hay adjunto.\"\n    },\n    \"resumen\": {\n      \"type\": \"string\"\n    },\n    \"obligatorios_completos\": {\n      \"type\": \"boolean\"\n    },\n    \"obligatorios_obtenidos\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"campo\": { \"type\": \"string\" },\n          \"valor\": { \"type\": \"string\" }\n        },\n        \"required\": [\"campo\", \"valor\"]\n      }\n    },\n    \"obligatorios_faltantes\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" }\n    },\n    \"opcionales_obtenidos\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"campo\": { \"type\": \"string\" },\n          \"valor\": { \"type\": \"string\" }\n        },\n        \"required\": [\"campo\", \"valor\"]\n      }\n    },\n    \"opcionales_faltantes\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" }\n    },\n    \"accion_recomendada\": {\n      \"type\": \"string\"\n    }\n  },\n  \"required\": [\n    \"categoria\",\n    \"tiene_adjunto\",\n    \"tipo_adjunto\",\n    \"detalle_adjunto\",\n    \"resumen\",\n    \"obligatorios_completos\",\n    \"obligatorios_obtenidos\",\n    \"obligatorios_faltantes\",\n    \"opcionales_obtenidos\",\n    \"opcionales_faltantes\",\n    \"accion_recomendada\"\n  ]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2176,
+        160
+      ],
+      "id": "03d54d59-2774-4845-bdac-140fb62a82d4",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        2896,
+        48
+      ],
+      "id": "2585702c-fb62-4140-ba01-531730d09cdc",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "TWP4peDzmRhFubxF",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "reply",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        3168,
+        -80
+      ],
+      "id": "d2555ed9-e7a1-46f9-9f17-abcc53057a46",
+      "name": "Reply to a message",
+      "webhookId": "5322790b-0bbf-4315-be5a-fc885a702636",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "LnL75k0G10iOcyJf",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a784ea1e-1a85-49d3-b26b-bc0b8f83cd7a",
+              "leftValue": "={{ $json.output.obligatorios_completos }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2592,
+        -448
+      ],
+      "id": "ff53b13d-6c20-406f-bf1a-8df8882c1559",
+      "name": "Ventas"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a784ea1e-1a85-49d3-b26b-bc0b8f83cd7a",
+              "leftValue": "={{ $json.output.obligatorios_completos }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2592,
+        -48
+      ],
+      "id": "1dbbc7f9-6afa-4af7-97b1-e845863ff82c",
+      "name": "Soporte"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a784ea1e-1a85-49d3-b26b-bc0b8f83cd7a",
+              "leftValue": "={{ $json.output.obligatorios_completos }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2592,
+        240
+      ],
+      "id": "03017dfe-ac4d-4ed9-9531-06f919096de0",
+      "name": "Facturacion"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a784ea1e-1a85-49d3-b26b-bc0b8f83cd7a",
+              "leftValue": "={{ $json.output.obligatorios_completos }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2592,
+        512
+      ],
+      "id": "89315632-17e2-4c76-b066-166d27c1f750",
+      "name": "Rrhh"
+    },
+    {
+      "parameters": {
+        "operation": "reply",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}",
+        "message": "=<div style=\"font-family: Arial, Helvetica, sans-serif; color: #333333; line-height: 1.6; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;\">\n  <div style=\"border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-bottom: 20px;\">\n    <h2 style=\"color: #0056b3; margin: 0;\">Soluciones Tec</h2>\n    <span style=\"font-size: 13px; color: #666666;\">Departamento de {{ $json.output.categoria }}</span>\n  </div>\n\n  <p>Estimado(a) <strong>{{ $json.output.obligatorios_obtenidos.find(x => x.campo === 'nombre_contacto')?.valor || $('Metadatos del Mensaje').item.json.nombre_remitente || 'Cliente' }}</strong>,</p>\n\n  <p>Hemos recibido y validado con éxito la totalidad de los datos para su solicitud{{ $json.output.opcionales_obtenidos.find(x => x.campo === 'empresa')?.valor ? ' de la empresa <strong>' + $json.output.opcionales_obtenidos.find(x => x.campo === 'empresa').valor + '</strong>' : '' }}.</p>\n\n  <div style=\"background-color: #e8f5e9; border-left: 4px solid #2e7d32; padding: 14px; margin: 20px 0; border-radius: 0 6px 6px 0;\">\n    <h4 style=\"margin: 0 0 10px 0; color: #2e7d32; font-size: 14px; text-transform: uppercase;\">Resumen de la Solicitud Registrada</h4>\n    <ul style=\"margin: 0; padding-left: 20px; font-size: 14px;\">\n      <li><strong>Producto o servicio:</strong> {{ $json.output.obligatorios_obtenidos.find(x => x.campo === 'producto_o_servicio')?.valor || 'No especificado' }}</li>\n      <li><strong>Alcance / Necesidad:</strong> {{ $json.output.obligatorios_obtenidos.find(x => x.campo === 'descripcion_necesidad')?.valor || $json.output.resumen }}</li>\n      {{ $json.output.opcionales_obtenidos.find(x => x.campo === 'empresa')?.valor ? '<li><strong>Empresa:</strong> ' + $json.output.opcionales_obtenidos.find(x => x.campo === 'empresa').valor + '</li>' : '' }}\n      {{ $json.output.opcionales_obtenidos.find(x => x.campo === 'identificacion_fiscal')?.valor ? '<li><strong>Identificación fiscal (NIT / Documento):</strong> ' + $json.output.opcionales_obtenidos.find(x => x.campo === 'identificacion_fiscal').valor + '</li>' : '' }}\n      {{ $json.output.opcionales_obtenidos.find(x => x.campo === 'presupuesto')?.valor ? '<li><strong>Presupuesto estimado:</strong> ' + $json.output.opcionales_obtenidos.find(x => x.campo === 'presupuesto').valor + '</li>' : '' }}\n    </ul>\n  </div>\n\n  <p>Para revisar las alternativas técnicas, evaluar los tiempos de entrega y presentarle una propuesta personalizada, le invitamos a seleccionar el día y la hora que mejor se acomoden a su agenda vía <strong>Google Meet</strong>:</p>\n\n  <div style=\"text-align: center; margin: 30px 0;\">\n    <a href=\"https://calendar.app.google/xDiptT2GrrACirk56\" \n       target=\"_blank\"\n       style=\"background-color: #0056b3; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold; font-size: 15px; display: inline-block;\">\n      📅 Agendar Reunión por Google Meet\n    </a>\n  </div>\n\n  <div style=\"background-color: #f8f9fa; border-left: 4px solid #6c757d; padding: 12px; margin: 20px 0; font-size: 13px; color: #555555;\">\n    <p style=\"margin: 0;\"><em>Nota: Al seleccionar el horario en el enlace, Google Calendar creará automáticamente el enlace de Google Meet y enviará la confirmación a su correo.</em></p>\n  </div>\n\n  <p>Quedamos atentos a su reserva.</p>\n\n  <p style=\"margin-top: 25px;\">Atentamente,<br>\n  <strong>Equipo Comercial</strong><br>\n  Soluciones Tec</p>\n</div>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2880,
+        -464
+      ],
+      "id": "90c7be97-d7c3-4edd-b62a-0e304bb1e914",
+      "name": "Reply to a message1",
+      "webhookId": "5322790b-0bbf-4315-be5a-fc885a702636",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "LnL75k0G10iOcyJf",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "reply",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}",
+        "message": "=<div style=\"font-family: Arial, Helvetica, sans-serif; color: #333333; line-height: 1.6; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;\">\n  <div style=\"border-bottom: 2px solid #d9381e; padding-bottom: 10px; margin-bottom: 20px;\">\n    <h2 style=\"color: #d9381e; margin: 0;\">Soluciones Tec</h2>\n    <span style=\"font-size: 13px; color: #666666;\">Centro de Soporte Técnico y Operaciones</span>\n  </div>\n\n  <p>Estimado(a) <strong>{{ $json.output.obligatorios_obtenidos.find(x => x.campo === 'usuario_contacto')?.valor || $('Editar campos').item.json.nombre_remitente || 'Usuario' }}</strong>,</p>\n\n  <p>Confirmamos la recepción de su reporte de incidencia técnica. La información suministrada ha sido validada satisfactoriamente y su caso ha ingresado a nuestra cola de atención prioritaria.</p>\n\n  <div style=\"background-color: #fbe9e7; border-left: 4px solid #d9381e; padding: 14px; margin: 20px 0; border-radius: 0 6px 6px 0;\">\n    <h4 style=\"margin: 0 0 10px 0; color: #c62828; font-size: 14px; text-transform: uppercase;\">Detalle de la Incidencia Registrada</h4>\n    <ul style=\"margin: 0; padding-left: 20px; font-size: 14px;\">\n      <li><strong>Contacto:</strong> {{ $json.output.obligatorios_obtenidos.find(x => x.campo === 'usuario_contacto')?.valor || 'No especificado' }}</li>\n      <li><strong>Teléfono asociado:</strong> {{ $json.output.obligatorios_obtenidos.find(x => x.campo === 'celular')?.valor || 'No especificado' }}</li>\n      <li><strong>Descripción del fallo:</strong> {{ $json.output.obligatorios_obtenidos.find(x => x.campo === 'descripcion_fallo')?.valor || $json.output.resumen }}</li>\n      <li><strong>Estado inicial:</strong> En triaje e investigación técnica</li>\n    </ul>\n  </div>\n\n  <div style=\"background-color: #e8f5e9; border-left: 4px solid #2e7d32; padding: 14px; margin: 20px 0; font-size: 14px; color: #1b5e20;\">\n    <strong>Tiempo estimado de respuesta:</strong><br>\n    Un especialista de nuestro equipo de ingeniería revisará los logs del servicio y se comunicará directamente con usted en un lapso aproximado de <strong>10 a 15 minutos</strong> vía telefónica o por este mismo medio para brindarle diagnóstico y solución.\n  </div>\n\n  <p style=\"font-size: 13px; color: #666666;\">Si dispone de capturas de pantalla o información adicional sobre la falla, puede responder directamente a este correo adjuntando el material para anexarlo a su expediente.</p>\n\n  <p style=\"margin-top: 25px;\">Atentamente,<br>\n  <strong>Mesa de Ayuda Técnica</strong><br>\n  Soluciones Tec</p>\n</div>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2880,
+        224
+      ],
+      "id": "ea1e80b1-50a8-421e-891d-fda59b4e648a",
+      "name": "Reply to a message2",
+      "webhookId": "5322790b-0bbf-4315-be5a-fc885a702636",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "LnL75k0G10iOcyJf",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        1184,
+        480
+      ],
+      "id": "daa03531-c95d-4085-9c75-38577980d42a",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "TWP4peDzmRhFubxF",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c0df1f5e-ce66-471b-98ba-6b95b4830950",
+              "name": "Document-summary",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1456,
+        240
+      ],
+      "id": "b44ba1b4-a82f-4a07-a057-5f46518c6a38",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "operation": "reply",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}",
+        "message": "=<div style=\"font-family: Arial, Helvetica, sans-serif; color: #333333; line-height: 1.6; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;\">\n  <div style=\"border-bottom: 2px solid #1565c0; padding-bottom: 10px; margin-bottom: 20px;\">\n    <h2 style=\"color: #1565c0; margin: 0;\">Departamento de Contabilidad y Facturación</h2>\n    <span style=\"font-size: 13px; color: #666666;\">Confirmación de Radicación y Validación Documental</span>\n  </div>\n\n  <p>Estimado(a) Proveedor / Colaborador,</p>\n\n  <p>Confirmamos la recepción de su documento tributario. La documentación obligatoria ha sido validada satisfactoriamente y ha ingresado formalmente a nuestro flujo de radicación contable.</p>\n\n  <div style=\"background-color: #f0f4f8; border-left: 4px solid #1565c0; padding: 14px; margin: 20px 0; border-radius: 0 6px 6px 0;\">\n    <h4 style=\"margin: 0 0 10px 0; color: #0d47a1; font-size: 14px; text-transform: uppercase;\">Detalle del Documento Radicado</h4>\n    <ul style=\"margin: 0; padding-left: 20px; font-size: 14px;\">\n      <li><strong>Tipo de trámite:</strong> {{ $json.output?.obligatorios_obtenidos?.find(x => x.campo === 'tipo_tramite')?.valor || $json.obligatorios_obtenidos?.find(x => x.campo === 'tipo_tramite')?.valor || 'Factura Electrónica' }}</li>\n      <li><strong>Tercero / Emisor:</strong> {{ $json.output?.obligatorios_obtenidos?.find(x => x.campo === 'identificacion_tercero')?.valor || $json.obligatorios_obtenidos?.find(x => x.campo === 'identificacion_tercero')?.valor || 'No especificado' }}</li>\n      <li><strong>Referencia / Fecha:</strong> {{ $json.output?.opcionales_obtenidos?.find(x => x.campo === 'numero_documento')?.valor || $json.opcionales_obtenidos?.find(x => x.campo === 'numero_documento')?.valor || 'Registrado en adjunto' }}</li>\n      <li><strong>Concepto:</strong> {{ $json.output?.opcionales_obtenidos?.find(x => x.campo === 'concepto')?.valor || $json.opcionales_obtenidos?.find(x => x.campo === 'concepto')?.valor || 'Prestación de servicios / Suministros' }}</li>\n      <li><strong>Valor total:</strong> {{ $json.output?.opcionales_obtenidos?.find(x => x.campo === 'valor_total')?.valor || $json.opcionales_obtenidos?.find(x => x.campo === 'valor_total')?.valor || 'Según factura adjunta' }}</li>\n    </ul>\n  </div>\n\n  <div style=\"background-color: #e8f5e9; border-left: 4px solid #2e7d32; padding: 14px; margin: 20px 0; font-size: 14px; color: #1b5e20;\">\n    <strong>Tiempo estimado de respuesta y causación:</strong><br>\n    Su soporte ha sido turnado al área de causación y tesorería. En un plazo máximo de <strong>3 días hábiles</strong> recibirá la confirmación de aprobación contable o la programación respectiva de pago.\n  </div>\n\n  <p style=\"font-size: 13px; color: #666666;\">Por favor conserve este correo como constancia de recepción. Si requiere realizar alguna aclaración sobre notas crédito o soporte adicional, puede responder directamente a este hilo.</p>\n\n  <p style=\"margin-top: 25px;\">Atentamente,<br>\n  <strong>Gestión de Cuentas por Pagar</strong><br>\n  Área Contable y Financiera</p>\n</div>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2880,
+        416
+      ],
+      "id": "5be9ea36-3d83-4abf-858f-57e21318ed37",
+      "name": "Reply to a message3",
+      "webhookId": "5322790b-0bbf-4315-be5a-fc885a702636",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "LnL75k0G10iOcyJf",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "reply",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}",
+        "message": "=<div style=\"font-family: Arial, Helvetica, sans-serif; color: #333333; line-height: 1.6; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;\">\n  <div style=\"border-bottom: 2px solid #2e7d32; padding-bottom: 10px; margin-bottom: 20px;\">\n    <h2 style=\"color: #2e7d32; margin: 0;\">Gestión de Talento Humano</h2>\n    <span style=\"font-size: 13px; color: #666666;\">Confirmación de Postulación y Registro en Base de Talento</span>\n  </div>\n\n  <p>Estimado(a) <strong>{{ $json.output?.obligatorios_obtenidos?.find(x => x.campo === 'nombre_candidato')?.valor || $json.obligatorios_obtenidos?.find(x => x.campo === 'nombre_candidato')?.valor || 'Candidato(a)' }}</strong>,</p>\n\n  <p>Agradecemos su interés en formar parte de nuestro equipo. Confirmamos que su hoja de vida y datos de contacto han sido recibidos y validados exitosamente por nuestro sistema de selección.</p>\n\n  <div style=\"background-color: #f1f8e9; border-left: 4px solid #2e7d32; padding: 14px; margin: 20px 0; border-radius: 0 6px 6px 0;\">\n    <h4 style=\"margin: 0 0 10px 0; color: #1b5e20; font-size: 14px; text-transform: uppercase;\">Resumen de la Postulación Registrada</h4>\n    <ul style=\"margin: 0; padding-left: 20px; font-size: 14px;\">\n      <li><strong>Candidato:</strong> {{ $json.output?.obligatorios_obtenidos?.find(x => x.campo === 'nombre_candidato')?.valor || $json.obligatorios_obtenidos?.find(x => x.campo === 'nombre_candidato')?.valor || 'Registrado' }}</li>\n      <li><strong>Perfil / Área de interés:</strong> {{ $json.output?.opcionales_obtenidos?.find(x => x.campo === 'cargo_interes')?.valor || $json.opcionales_obtenidos?.find(x => x.campo === 'cargo_interes')?.valor || 'General' }}</li>\n      <li><strong>Canal de contacto:</strong> {{ $json.output?.obligatorios_obtenidos?.find(x => x.campo === 'canal_contacto')?.valor || $json.obligatorios_obtenidos?.find(x => x.campo === 'canal_contacto')?.valor || 'Registrado en sistema' }}</li>\n      <li><strong>Soporte curricular:</strong> {{ $json.output?.tipo_adjunto || 'Hoja de Vida procesada' }}</li>\n    </ul>\n  </div>\n\n  <div style=\"background-color: #e8f5e9; border-left: 4px solid #388e3c; padding: 14px; margin: 20px 0; font-size: 14px; color: #1b5e20;\">\n    <strong>Estado del proceso:</strong><br>\n    Su perfil ha sido integrado a nuestra base activa de postulantes. Nuestro equipo de selección revisa continuamente los perfiles registrados; en caso de que su experiencia y habilidades se ajusten a una vacante vigente o de próxima apertura, nos comunicaremos directamente con usted a través de los canales suministrados para coordinar las siguientes etapas.\n  </div>\n\n  <p style=\"font-size: 13px; color: #666666;\">Si en el futuro desea actualizar su portafolio, certificaciones o datos de contacto, puede responder a este mismo correo adjuntando la información actualizada.</p>\n\n  <p style=\"margin-top: 25px;\">Atentamente,<br>\n  <strong>Equipo de Selección y Talento Humano</strong><br>\n  Atracción y Desarrollo Organizacional</p>\n</div>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2880,
+        608
+      ],
+      "id": "d69fbaf4-14f7-4bb5-99c9-17649e16218b",
+      "name": "Reply to a message4",
+      "webhookId": "5322790b-0bbf-4315-be5a-fc885a702636",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "LnL75k0G10iOcyJf",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0ff227b8-e1e3-4d91-b7f6-c291e78a3685",
+              "name": "From",
+              "value": "={{ $json.from.value[0].address}}",
+              "type": "string"
+            },
+            {
+              "id": "d5422e21-d43e-4f6e-b542-6851795d28c5",
+              "name": "snippet",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            },
+            {
+              "id": "dd3a0220-b2e7-457d-92a1-c30bbcf14712",
+              "name": "internalDate",
+              "value": "={{ $json.headers.date }}",
+              "type": "string"
+            },
+            {
+              "id": "da635748-1cc6-43c3-9c3c-297e4bed5eaa",
+              "name": "threadId",
+              "value": "={{ $json.threadId }}",
+              "type": "string"
+            },
+            {
+              "id": "6ea64c2d-07e0-4cdf-8a47-a9071bc5095f",
+              "name": "binary",
+              "value": "={{ $binary && Object.keys($binary).length > 0 }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        208,
+        0
+      ],
+      "id": "2c43c29e-9f4e-4a7f-9bc0-a66e682d6fc3",
+      "name": "Metadatos del Mensaje"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2d60c646-9dea-453c-87da-5c158835fa66",
+              "leftValue": "={{ $json.binary }}",
+              "rightValue": "=true",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        432,
+        0
+      ],
+      "id": "aac9769e-b054-40d8-80be-32015d71bc81",
+      "name": "¿Contiene Archivo PDF?"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}",
+        "simple": false,
+        "options": {
+          "downloadAttachments": true
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        656,
+        240
+      ],
+      "id": "aa00490c-73ed-4f27-a4de-d0f67faa6a5c",
+      "name": "Descargar: Archivo",
+      "webhookId": "bac535d8-4350-4abb-bb18-9d5020afd502",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "LnL75k0G10iOcyJf",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "attachment_0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        880,
+        240
+      ],
+      "id": "9d22a0d6-d302-44d0-a5bc-ed6c9bdb37db",
+      "name": "Extracción Texto"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.text }}",
+        "options": {
+          "systemMessage": "Eres un clasificador y extractor documental especializado en análisis de archivos adjuntos (PDFs).\nTu objetivo es analizar el texto crudo del documento extraído, identificar con precisión de qué tipo de archivo se trata, extraer sus entidades críticas y estructurar un resumen claro para que otro agente automatizado procese la solicitud.\n\nREGLAS DE CLASIFICACIÓN (categorías principales):\n1. \"FACTURA_O_COBRO\": Facturas de venta, cuentas de cobro, recibos de pago, cotizaciones, órdenes de compra.\n2. \"HOJA_DE_VIDA\": Currículums, CVs, postulaciones laborales, perfiles profesionales.\n3. \"DOCUMENTACION_FISCAL\": RUT, certificados de retención, declaraciones tributarias, extractos bancarios, estados financieros.\n4. \"REPORTE_TECNICO_O_ERROR\": Capturas de logs, reportes de bugs, tickets de soporte técnico, fallos de infraestructura o sistemas.\n5. \"LEGAL_O_CONTRATO\": Acuerdos de confidencialidad, contratos de servicios, actas, resoluciones, poderes.\n6. \"OTRO\": Cualquier documento que no encaje en las categorías anteriores.\n\nINSTRUCCIONES DE EXTRACCIÓN:\n- Sé objetivo y exhaustivo. Si un dato no existe en el texto, coloca null.\n- En \"datos_clave\", extrae pares clave-valor relevantes según el tipo de documento:\n  * Si es factura/cobro: emisor, receptor, número de documento, fecha de emisión/vencimiento, subtotal, impuestos, total, moneda.\n  * Si es hoja de vida: nombre del candidato, correo, teléfono, perfil/carrera principal, años aproximados de experiencia, habilidades técnicas destacadas.\n  * Si es documentación fiscal: razón social/nombre, identificación fiscal (NIT/RUT/ID), año gravable/periodo, tipo de certificado.\n  * Si es reporte de error: sistema/servicio afectado, mensaje o código de error, severidad aparente, componente fallido.\n- Responde EXCLUSIVAMENTE en formato JSON válido, sin bloques de código markdown, sin explicaciones ni texto introductorio.\n\nESTRUCTURA DE RESPUESTA REQUERIDA (JSON):\n{\n  \"categoria\": \"FACTURA_O_COBRO | HOJA_DE_VIDA | DOCUMENTACION_FISCAL | REPORTE_TECNICO_O_ERROR | LEGAL_O_CONTRATO | OTRO\",\n  \"subtipo\": \"string específico (ej: 'Factura Electrónica de Venta', 'RUT Persona Jurídica', 'CV Desarrollador Python')\",\n  \"confianza\": \"ALTA | MEDIA | BAJA\",\n  \"emisor_o_titular\": \"string o null\",\n  \"resumen_ejecutivo\": \"Explicación breve de 2 a 3 oraciones sobre el propósito del documento y su contenido esencial.\",\n  \"datos_clave\": {\n    \"campo1\": \"valor\",\n    \"campo2\": \"valor\"\n  },\n  \"requiere_accion_inmediata\": true/false,\n  \"notas_adicionales\": \"Observaciones breves sobre anomalías, firmas faltantes o texto cortado/ilegible si aplica.\"\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1104,
+        240
+      ],
+      "id": "d85fdede-9aca-407a-9cb2-9580380eac27",
+      "name": "Clasificador y Extractor Documental"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1680,
+        -144
+      ],
+      "id": "067b838d-7733-4457-b885-9c9089da6290",
+      "name": "Texto Correo + Datos PDF"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=\n\n{{ $('Clasificador y Extractor Documental').isExecuted ? \"Información extraída del archivo adjunto:\\n\" + JSON.stringify($('Clasificador y Extractor Documental').first().json.output || $('Clasificador y Extractor Documental').first().json, null, 2) : \"No se adjuntó ningún archivo en este correo.\" }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Eres un asistente de clasificación y triaje de correos y documentos adjuntos.\n\nInstrucciones obligatorias:\n1. Revisa la entrada recibida para determinar si incluye información de un archivo adjunto:\n   - Si contiene datos de archivo adjunto: fija \"tiene_adjunto\" = true, define \"tipo_adjunto\" con su clasificación (ej: HOJA_DE_VIDA, FACTURA, etc.) y sintetiza su contenido en \"detalle_adjunto\".\n   - Si no hay archivo adjunto: fija \"tiene_adjunto\" = false, \"tipo_adjunto\" = \"NINGUNO\" y \"detalle_adjunto\" = \"Ninguno\".\n\n2. Consulta la base de datos de Google Sheets mediante tu herramienta para obtener las categorías, 'Campos_Obligatorios' y 'Campos_Opcionales'.\n\n3. Identifica la categoría correspondiente evaluando TANTO el mensaje del correo como el contenido del archivo adjunto (si existe).\n\n4. Toma ÚNICAMENTE los campos definidos en 'Campos_Obligatorios' y 'Campos_Opcionales' para ESA categoría específica.\n\n5. Evalúa la información disponible (puedes extraer datos tanto del texto del correo como de la información del archivo adjunto):\n   - Para los campos obligatorios de esa categoría:\n     * Si el dato se encuentra en el correo o en el adjunto, agrégalo a 'obligatorios_obtenidos' como {\"campo\": \"nombre_del_campo\", \"valor\": \"informacion_encontrada\"}.\n     * Si el dato no fue suministrado en ninguna de las dos fuentes, agrégalo a 'obligatorios_faltantes' solo con su nombre.\n   - Para los campos opcionales de esa categoría:\n     * Si el dato está en el mensaje o en el adjunto, agrégalo a 'opcionales_obtenidos' como {\"campo\": \"nombre_del_campo\", \"valor\": \"informacion_encontrada\"}.\n     * Si no está, agrégalo a 'opcionales_faltantes' solo con su nombre.\n\n6. Validación de obligatorios:\n   - Si 'obligatorios_faltantes' contiene al menos un elemento:\n     * obligatorios_completos = false\n     * accion_recomendada = \"PEDIR_DATOS_FALTANTES\"\n   - Si 'obligatorios_faltantes' está vacío:\n     * obligatorios_completos = true\n     * accion_recomendada = El texto de la columna 'Accion_Sugerida' de la hoja.\n\n7. Genera un 'resumen' breve y devuelve el JSON estructurado según el schema."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1968,
+        -80
+      ],
+      "id": "4a54d5d2-479f-4b63-a04c-6e993888c305",
+      "name": "Reglas de Negocio",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "6b6acfbc-b645-482d-8d89-8df1e7425926",
+                    "leftValue": "={{ $json.output.categoria }}",
+                    "rightValue": "Ventas",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "345f1f51-4e33-4a3a-822d-3710c3c563b3",
+                    "leftValue": "={{ $json.output.categoria }}",
+                    "rightValue": "Soporte",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "73e8c716-f38e-458f-8c3e-45f2892ce6af",
+                    "leftValue": "={{ $json.output.categoria }}",
+                    "rightValue": "Facturacion",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "0a125a19-d2bc-47e0-bafe-8aca04f3604c",
+                    "leftValue": "={{ $json.output.categoria }}",
+                    "rightValue": "RRHH",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        2368,
+        -112
+      ],
+      "id": "68c2d26b-c6dc-4cbc-ba59-1e062019380c",
+      "name": "Enrutador por Departamento"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.output }}",
+        "options": {
+          "systemMessage": "Eres el asistente de comunicaciones corporativas de \"Soluciones Tec\". Tu labor es redactar un correo formal, cordial y visualmente estructurado en formato HTML para un cliente cuya solicitud carece de información indispensable.\n\nVARIABLES DEL CASO:\n- Área/Categoría: {{ $json.output.categoria }}\n- Nombre del remitente: {{ $('Gmail Trigger').item.json.from }}\n- Mensaje original recibido: {{ $('Gmail Trigger').item.json.snippet }}\n- Obligatorios ya recibidos: {{ JSON.stringify($json.output.obligatorios_obtenidos) }}\n- Obligatorios pendientes: {{ JSON.stringify($json.output.obligatorios_faltantes) }}\n- Opcionales ya recibidos: {{ JSON.stringify($json.output.opcionales_obtenidos) }}\n- Opcionales pendientes/sugeridos: {{ JSON.stringify($json.output.opcionales_faltantes) }}\n\nINSTRUCCIONES DE REDACCIÓN Y DISEÑO:\n1. Responde ÚNICAMENTE con código HTML dentro de un <div> principal con estilos en línea (font-family: Arial, sans-serif; color: #333; line-height: 1.5;).\n2. NO utilices bloques markdown (sin ```html ni ```). NO agregues objetos JSON ni datos de depuración al final.\n3. Estructura del contenido:\n   A. ENCABEZADO Y SALUDO:\n      - Título institucional: \"Soluciones Tec | Departamento de {{ $json.output.categoria }}\".\n      - Saludo personalizado usando el nombre si está disponible, o \"Estimado(a) cliente\".\n      - Confirmación de recepción amable del requerimiento.\n   B. RESUMEN DEL MENSAJE ORIGINAL:\n      - Un recuadro gris suave (background: #f8f9fa; border-left: 4px solid #6c757d; padding: 10px;) que cite el extracto del mensaje enviado por el usuario.\n   C. BLOQUE 1 - INFORMACIÓN REGISTRADA (background: #e8f5e9; border-left: 4px solid #2e7d32; padding: 12px; margin-bottom: 12px;):\n      - Lista con viñetas de los datos obligatorios y opcionales que el usuario sí suministró.\n   D. BLOQUE 2 - REQUISITOS INDISPENSABLES PENDIENTES (background: #fff3e0; border-left: 4px solid #ef6c00; padding: 12px; margin-bottom: 12px;):\n      - Lista de los 'obligatorios_faltantes', explicando brevemente y en tono constructivo qué detalle se necesita para poder procesar la solicitud.\n   E. BLOQUE 3 - INFORMACIÓN ADICIONAL SUGERIDA (background: #e3f2fd; border-left: 4px solid #1976d2; padding: 12px; margin-bottom: 15px;):\n      - Presenta los 'opcionales_faltantes' bajo el concepto: \"Datos opcionales que nos permiten brindarle una asesoría más ágil y ajustada a su medida\".\n      - Aclara amablemente que estos campos no frenan el proceso, pero enriquecen la solución (ej. presupuesto estimado, NIT para facturación futura, alcance deseado).\n   F. CIERRE Y LLAMADO A LA ACCIÓN:\n      - Indicar que puede responder directamente a este correo completando los datos.\n      - Despedida formal: \"Atentamente, Equipo de Soluciones Tec\"."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        2816,
+        -176
+      ],
+      "id": "d77b6ee3-66f8-404e-aacf-3faecf8c3a50",
+      "name": "Redactor Asistido"
+    }
+  ],
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Metadatos del Mensaje",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Reglas de Negocio",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "Reglas de Negocio",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Reglas de Negocio",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Redactor Asistido",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ventas": {
+      "main": [
+        [
+          {
+            "node": "Reply to a message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Redactor Asistido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Soporte": {
+      "main": [
+        [
+          {
+            "node": "Reply to a message2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Redactor Asistido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Facturacion": {
+      "main": [
+        [
+          {
+            "node": "Reply to a message3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Redactor Asistido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rrhh": {
+      "main": [
+        [
+          {
+            "node": "Reply to a message4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Redactor Asistido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Clasificador y Extractor Documental",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Texto Correo + Datos PDF",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Metadatos del Mensaje": {
+      "main": [
+        [
+          {
+            "node": "¿Contiene Archivo PDF?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Contiene Archivo PDF?": {
+      "main": [
+        [
+          {
+            "node": "Texto Correo + Datos PDF",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Descargar: Archivo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reglas de Negocio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Descargar: Archivo": {
+      "main": [
+        [
+          {
+            "node": "Extracción Texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extracción Texto": {
+      "main": [
+        [
+          {
+            "node": "Clasificador y Extractor Documental",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clasificador y Extractor Documental": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Texto Correo + Datos PDF": {
+      "main": [
+        [
+          {
+            "node": "Reglas de Negocio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reglas de Negocio": {
+      "main": [
+        [
+          {
+            "node": "Enrutador por Departamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enrutador por Departamento": {
+      "main": [
+        [
+          {
+            "node": "Ventas",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Soporte",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Facturacion",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Rrhh",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redactor Asistido": {
+      "main": [
+        [
+          {
+            "node": "Reply to a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b5a6eb0016b0c2cc54193d6d6c0a78c1b628a955da4d05367875ca2bab0e7825"
+  }
+}

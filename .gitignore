@@ -1,0 +1,38 @@
+# ── Datos personales ────────────────────────────────────────────
+# Los PDF de respuestas/ muestran correos reales (tus cuentas de Gmail),
+# un teléfono y números de identificación. No se suben tal cual:
+# para el README, usar capturas recortadas o con esos datos tapados
+# y guardarlas en docs/img/.
+respuestas/
+
+# ── Credenciales y secretos ─────────────────────────────────────
+.env
+.env.*
+*.pem
+*.key
+credentials*.json
+client_secret*.json
+token*.json
+
+# ── Datos locales de n8n (base de datos, credenciales cifradas) ─
+.n8n/
+*.sqlite
+*.db
+
+# ── Node / herramientas ─────────────────────────────────────────
+node_modules/
+npm-debug.log*
+*.log
+
+# ── Sistema y editor ────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~
+
+# ── Archivos pesados (van en assets/ en Drive) ──────────────────
+/assets
+*.mp4
+*.mov
